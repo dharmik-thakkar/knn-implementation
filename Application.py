@@ -85,7 +85,8 @@ def visualizePredictions(testData, knn_predictions):
     Visualize Petal length vs. Petal width
     """
     testData.visualize.scatterPlot('Petal length', 'Petal width')
-
+    testData.dataDict['Species'] = knn_predictions
+    testData.visualize.scatterPlot('Petal length', 'Petal width')
 
 if __name__ == "__main__":
     main()
