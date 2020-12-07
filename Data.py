@@ -1,10 +1,9 @@
 import csv
 from DataVisualization import DataVisualization
-import numpy as np
 
 
 class Data:
-    def __init__(self,inputFile=None, reference=None):
+    def __init__(self, inputFile=None, reference=None):
         """        
         Inputs
             •	inputFile: Name of the input file. Default value is None
@@ -97,7 +96,7 @@ class Data:
         # if features is None, use all the features
         if not features:
             features = self.header
-        if self.reference is not None:
+        if self.reference is not None and self.reference in features:
             features.remove(self.reference)
         numpy_matrix = []
         data_size = len(self.dataDict[features[0]])
