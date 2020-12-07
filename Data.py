@@ -1,8 +1,10 @@
 import csv
 from DataVisualization import DataVisualization
 import numpy as np
-class Data:    
-    def __init__(self,inputFile = None, reference=None):
+
+
+class Data:
+    def __init__(self,inputFile=None, reference=None):
         """        
         Inputs
             •	inputFile: Name of the input file. Default value is None
@@ -16,7 +18,7 @@ class Data:
         Outputs: None
         """
         # Check if inputFile is None
-        if inputFile == None:
+        if inputFile is None:
             # Initialize all the variables to None
             self.dataDict = None            
             self.reference = None     
@@ -30,8 +32,9 @@ class Data:
         
         # initialize DataStatistics and DataVisualization objects        
         self.visualize = DataVisualization(self)
+
         
-    def load (self,inputFile,reference=None):
+    def load(self, inputFile, reference=None):
         """        
         Inputs
             •	inputFile: Name of the input file. 
@@ -45,7 +48,7 @@ class Data:
         # Set values of inputFile and reference
         self.inputFile = inputFile
         self.reference = reference        
-        #Initialize header data and columnDict
+        # Initialize header data and columnDict
         headerData = []              
         columnDict = {}
     
@@ -53,7 +56,7 @@ class Data:
         with open(inputFile) as csvFile:
             csvReader = csv.reader(csvFile)
             # Iterate through all the rows in the csv file
-            for i,row in enumerate(csvReader):
+            for i, row in enumerate(csvReader):
                 # Header row
                 if i == 0:
                     headerData = row
@@ -62,7 +65,7 @@ class Data:
                 
                 # Remaining rows
                 else:
-                    for j,data in enumerate(row):
+                    for j, data in enumerate(row):
                         try:
                             columnDict[headerData[j]].append(float(data))
                         except:
@@ -73,10 +76,9 @@ class Data:
         self.dataDict = columnDict
         self.header = headerData
         self.numColumns = len(headerData)
-        self.numRows = len(columnDict[headerData[0]]) 
+        self.numRows = len(columnDict[headerData[0]])
     
-    
-    def getNumpyMatrix(self,features=None):        
+    def getNumpyMatrix(self, features=None):
         """        
         This function computes a numpy matrix by concatenating 
         the columns corresponding to the features provided by 
@@ -91,26 +93,36 @@ class Data:
             •	A numpy matrix computed by concatenating the 
                 columns represented by the input variable, features.
         """
-        dataDict = self.dataDict
-        reference = self.reference
+        # dataDict = self.dataDict
+        # reference = self.reference
         # if features is None, use all the features
-        if features is None:
+        if not features:
             features = self.header
-        XList = []
-        # Iterate through all the features
-        for i in dataDict:
-            # Skip reference
-            if i == reference:
-                continue            
-            elif i in features:
-                # Append the list
-                XList.append(dataDict[i])
-        
-        X = np.array(XList)
-        
-        # Return transpose to ensure matrix shape is same as
-        # shape of data in the csv file
-        return X.T
+        if self.reference is not None:
+            features.remove(self.reference)
+        numpy_matrix = []
+        data_size = len(self.dataDict[features[0]])
+        for row_id in range(data_size):
+            matrix_row = []
+            for feature in features:
+                matrix_row.append(self.dataDict[feature][row_id])
+            numpy_matrix.append(matrix_row)
+        return numpy_matrix
+        # XList = []
+        # # Iterate through all the features
+        # for i in dataDict:
+        #     # Skip reference
+        #     if i == reference:
+        #         continue
+        #     elif i in features:
+        #         # Append the list
+        #         XList.append(dataDict[i])
+        #
+        # X = np.array(XList)
+        #
+        # # Return transpose to ensure matrix shape is same as
+        # # shape of data in the csv file
+        # return X.T
     
     def getReference(self):
         return self.reference
@@ -128,6 +140,8 @@ class Data:
             self.reference = reference
         else:
             print(reference + 'does not exist in the dataset')
-                
-            
-            
+
+inputFile = 'ExampleData.csv'
+breastData = Data()
+breastData.load(inputFile)
+print (breastData.getNumpyMatrix())
