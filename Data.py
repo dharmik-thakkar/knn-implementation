@@ -32,7 +32,6 @@ class Data:
         
         # initialize DataStatistics and DataVisualization objects        
         self.visualize = DataVisualization(self)
-
         
     def load(self, inputFile, reference=None):
         """        
@@ -108,27 +107,11 @@ class Data:
                 matrix_row.append(self.dataDict[feature][row_id])
             numpy_matrix.append(matrix_row)
         return numpy_matrix
-        # XList = []
-        # # Iterate through all the features
-        # for i in dataDict:
-        #     # Skip reference
-        #     if i == reference:
-        #         continue
-        #     elif i in features:
-        #         # Append the list
-        #         XList.append(dataDict[i])
-        #
-        # X = np.array(XList)
-        #
-        # # Return transpose to ensure matrix shape is same as
-        # # shape of data in the csv file
-        # return X.T
     
     def getReference(self):
         return self.reference
-    
-    
-    def setReference(self,reference):
+
+    def setReference(self, reference):
         """
         Inputs
             •	reference: Name of the reference column. The default value is None. 
@@ -140,8 +123,3 @@ class Data:
             self.reference = reference
         else:
             print(reference + 'does not exist in the dataset')
-
-inputFile = 'ExampleData.csv'
-breastData = Data()
-breastData.load(inputFile)
-print (breastData.getNumpyMatrix())
